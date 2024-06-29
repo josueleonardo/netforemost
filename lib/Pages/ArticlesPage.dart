@@ -20,7 +20,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
 
   Future<void> fetchArticles() async {
     try {
-      final response = await http.get(Uri.parse('http://localhost:3000/articles'));
+      final response = await http.get(Uri.parse('http://localhost:3000/articles')); //articles
       if (response.statusCode == 200) {
         setState(() {
           articles = json.decode(response.body);
@@ -48,8 +48,16 @@ class _ArticlesPageState extends State<ArticlesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Articles'),
+        title: const Text(
+          'Articles',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        backgroundColor: Colors.amberAccent,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -57,7 +65,20 @@ class _ArticlesPageState extends State<ArticlesPage> {
         itemCount: articles.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(articles[index]['title']),
+            title:
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  const TextSpan(
+                      text: 'Title: ',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18)),
+                  TextSpan(
+                      text: articles[index]['title'],
+                      style: const TextStyle(fontSize: 18, color: Colors.black)
+                  ),
+                ],
+              ),
+            ),
             onTap: () => _launchURL(articles[index]['url']),
           );
         },
